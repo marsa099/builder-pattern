@@ -74,4 +74,46 @@ public class PhaseSeederTests
         Assert.Equal(5, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones)).Count());
         Assert.Equal(4, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones.SelectMany(m => m.Activities))).Count());
     }
+
+    [Fact]
+    public void Test4()
+    {
+        var seeder = new PhaseSeederBuilder();
+
+        var phases = seeder
+            .AddPhase("10", "Phase 10 Description")
+            .AddPhase("20", "Phase 20 Description")
+                .AddStage("2.1", "Stage 2.1 Description", StageTypeEnum.International)
+                .AddStage("2.2", "Stage 2.2 Description", StageTypeEnum.International)
+                    .AddMilestone("2.2.1", "Milestone 2.2.1 Description", MilestoneTypeEnum.National)
+            .Build();
+        ;
+
+        Assert.Equal(2, phases.Count());
+        Assert.Equal(2, phases.SelectMany(p => p.Stages).Count());
+        Assert.Equal(1, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones)).Count());
+        Assert.Equal(0, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones.SelectMany(m => m.Activities))).Count());
+    }
+
+        [Fact]
+    public void Test5()
+    {
+        var seeder = new PhaseSeederBuilder();
+
+        var phases = seeder
+            .AddPhase("10", "Phase 10 Description")
+            .AddPhase("20", "Phase 20 Description")
+                .AddStage("2.1", "Stage 2.1 Description", StageTypeEnum.International)
+                .AddStage("2.2", "Stage 2.2 Description", StageTypeEnum.International)
+                    .AddMilestone("2.2.1", "Milestone 2.2.1 Description", MilestoneTypeEnum.National)
+                        .AddActivity("2.2.1.1", "Activity 2.2.1.1 Description", MilestoneActivityTypeEnum.A)
+                        .AddActivity("2.2.1.2", "Activity 2.2.1.2 Description", MilestoneActivityTypeEnum.A)
+            .Build();
+        ;
+
+        Assert.Equal(2, phases.Count());
+        Assert.Equal(2, phases.SelectMany(p => p.Stages).Count());
+        Assert.Equal(1, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones)).Count());
+        Assert.Equal(2, phases.SelectMany(p => p.Stages.SelectMany(s => s.Milestones.SelectMany(m => m.Activities))).Count());
+    }
 }
